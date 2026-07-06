@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+.cache/
+.data/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.tgz
+.DS_Store
