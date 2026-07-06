@@ -22,22 +22,34 @@ const pageTitle = "AI Workflow Team Scoreboard";
         --green: #7bd88f;
         --yellow: #f4d35e;
         --red: #ff7a7a;
+        --brand-pink: #ff6fb5;
       }
 
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
 
       body {
         margin: 0;
         min-height: 100vh;
         background:
-          radial-gradient(circle at top left, rgba(68, 215, 208, 0.14), transparent 34rem),
+          radial-gradient(circle at top left, rgba(68, 215, 208, 0.16), transparent 34rem),
           linear-gradient(160deg, #09111f 0%, #111827 52%, #0d1324 100%);
         color: var(--text);
-        font-family: "Noto Sans KR", "Apple SD Gothic Neo", system-ui, sans-serif;
+        font-family:
+          "Noto Sans KR",
+          "Apple SD Gothic Neo",
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
       }
 
-      button, input { font: inherit; }
-      button { border: 0; cursor: pointer; }
+      button {
+        border: 0;
+        cursor: pointer;
+        font: inherit;
+      }
 
       .shell {
         width: min(1440px, calc(100vw - 40px));
@@ -54,11 +66,41 @@ const pageTitle = "AI Workflow Team Scoreboard";
         padding: 14px 16px;
         border: 1px solid rgba(90, 167, 255, 0.24);
         border-radius: 8px;
-        background: rgba(17, 27, 44, 0.74);
+        background:
+          linear-gradient(135deg, rgba(90, 167, 255, 0.14), rgba(255, 111, 181, 0.08)),
+          rgba(17, 27, 44, 0.74);
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
       }
 
-      .brand-copy strong { display: block; font-size: 18px; }
-      .brand-copy span { display: block; margin-top: 3px; color: #b8c5d8; font-size: 13px; }
+      .brand-lockup {
+        display: flex;
+        min-width: 0;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .brand-logo {
+        width: 42px;
+        height: 42px;
+        object-fit: contain;
+        flex: 0 0 auto;
+        filter: drop-shadow(0 8px 18px rgba(90, 167, 255, 0.24));
+      }
+
+      .brand-copy strong {
+        display: block;
+        color: var(--text);
+        font-size: 18px;
+        line-height: 1.1;
+      }
+
+      .brand-copy span {
+        display: block;
+        margin-top: 3px;
+        color: #b8c5d8;
+        font-size: 13px;
+        line-height: 1.35;
+      }
 
       .brand-badge {
         display: inline-flex;
@@ -83,12 +125,35 @@ const pageTitle = "AI Workflow Team Scoreboard";
         border-bottom: 1px solid var(--line);
       }
 
-      .eyebrow { margin: 0 0 10px; color: var(--cyan); font-size: 14px; font-weight: 700; }
-      h1 { margin: 0; font-size: clamp(34px, 4vw, 64px); line-height: 1.05; letter-spacing: 0; }
-      h2, h3 { margin: 0; letter-spacing: 0; }
-      .hero p { max-width: 780px; margin: 18px 0 0; color: #cbd5e1; font-size: 18px; line-height: 1.7; }
+      .eyebrow {
+        margin: 0 0 10px;
+        color: var(--cyan);
+        font-size: 14px;
+        font-weight: 700;
+      }
 
-      .actions { display: flex; gap: 10px; align-items: center; justify-content: flex-end; flex-wrap: wrap; }
+      h1 {
+        margin: 0;
+        font-size: clamp(34px, 4vw, 64px);
+        line-height: 1.05;
+        letter-spacing: 0;
+      }
+
+      .hero p {
+        max-width: 780px;
+        margin: 18px 0 0;
+        color: #cbd5e1;
+        font-size: 18px;
+        line-height: 1.7;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+      }
 
       .button {
         min-height: 44px;
@@ -105,152 +170,820 @@ const pageTitle = "AI Workflow Team Scoreboard";
         color: var(--text);
       }
 
-      .status, .auto-refresh { color: var(--muted); font-size: 14px; }
-
-      .summary {
-        display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
-        gap: 12px;
-        margin: 24px 0;
-      }
-
-      .metric, .team-card, .rules-toggle, .admin-panel {
-        border: 1px solid rgba(148, 163, 184, 0.18);
-        border-radius: 8px;
-        background: rgba(17, 27, 44, 0.76);
-      }
-
-      .metric { padding: 16px; }
-      .metric span { display: block; color: var(--muted); font-size: 13px; }
-      .metric strong { display: block; margin-top: 8px; font-size: 28px; }
-
-      .scoreboard-head, .section-title, .admin-costs-head {
-        display: flex;
-        gap: 14px;
-        align-items: end;
-        justify-content: space-between;
-        margin: 28px 0 14px;
-      }
-
-      .scoreboard-head p, .section-title p, .admin-costs-head p {
-        margin: 6px 0 0;
+      .status {
         color: var(--muted);
-        line-height: 1.6;
+        font-size: 14px;
       }
-
-      .score-chart {
-        display: grid;
-        gap: 10px;
-        padding: 18px;
-        border-radius: 8px;
-        background: rgba(9, 17, 31, 0.45);
-      }
-
-      .bar-row {
-        display: grid;
-        grid-template-columns: 72px minmax(0, 1fr) 72px;
-        gap: 12px;
-        align-items: center;
-      }
-
-      .bar-track {
-        height: 14px;
-        overflow: hidden;
-        border-radius: 999px;
-        background: rgba(148, 163, 184, 0.16);
-      }
-
-      .bar-fill {
-        height: 100%;
-        border-radius: inherit;
-        background: linear-gradient(90deg, var(--cyan), var(--blue));
-      }
-
-      .teams {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 14px;
-      }
-
-      .team-card { padding: 18px; }
-      .team-top { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
-      .team-score { color: var(--cyan); font-size: 34px; font-weight: 900; }
-      .team-repo { color: var(--muted); font-size: 13px; word-break: break-all; }
-      .pill { display: inline-flex; border-radius: 999px; padding: 4px 9px; background: rgba(123, 216, 143, 0.14); color: #c8ffd3; font-size: 12px; font-weight: 800; }
-      .pill.warning { background: rgba(244, 211, 94, 0.14); color: #ffe99a; }
-      .pill.danger { background: rgba(255, 122, 122, 0.14); color: #ffc6c6; }
-
-      .metric-grid {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 8px;
-        margin-top: 16px;
-      }
-
-      .mini { padding: 10px; border-radius: 8px; background: rgba(9, 17, 31, 0.46); }
-      .mini span { display: block; color: var(--muted); font-size: 12px; }
-      .mini strong { display: block; margin-top: 5px; }
-
-      .members { display: grid; gap: 8px; margin-top: 16px; }
-      .member { display: grid; grid-template-columns: 132px minmax(0, 1fr) 46px; gap: 10px; align-items: center; font-size: 13px; }
-
-      .quality {
-        margin-top: 16px;
-        padding: 12px;
-        border-radius: 8px;
-        background: rgba(9, 17, 31, 0.46);
-      }
-
-      .quality p { margin: 8px 0 0; color: #cbd5e1; line-height: 1.55; }
 
       .admin-panel {
         display: none;
         margin-top: 22px;
         padding: 18px;
-        border-color: rgba(90, 167, 255, 0.28);
+        border: 1px solid rgba(90, 167, 255, 0.28);
+        border-radius: 8px;
+        background: rgba(17, 27, 44, 0.92);
       }
 
-      .admin-panel.active { display: block; }
-      .admin-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; margin: 16px 0; }
-      .input { min-height: 44px; width: 100%; border: 1px solid var(--line); border-radius: 8px; background: rgba(9, 17, 31, 0.72); color: var(--text); padding: 0 14px; }
-      .admin-error { min-height: 20px; color: var(--yellow); font-size: 13px; }
-      .admin-repos { display: grid; gap: 8px; }
-      .admin-repo { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 10px; border-radius: 8px; background: rgba(9, 17, 31, 0.46); }
+      .admin-panel.active {
+        display: block;
+      }
 
-      .rules-toggle { margin-top: 28px; padding: 16px; }
-      .rules-toggle summary { cursor: pointer; font-weight: 900; }
-      .rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
-      .rule { padding: 12px; border-radius: 8px; background: rgba(9, 17, 31, 0.46); }
-      .rule p { margin: 8px 0 0; color: var(--muted); line-height: 1.55; }
+      .admin-panel h2 {
+        margin-bottom: 6px;
+      }
 
-      .notice, .empty {
-        padding: 16px;
+      .admin-panel p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .admin-form {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 10px;
+        margin: 16px 0;
+      }
+
+      .input {
+        min-height: 44px;
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(9, 17, 31, 0.72);
+        color: var(--text);
+        font: inherit;
+        padding: 0 14px;
+      }
+
+      .admin-repos {
+        display: grid;
+        gap: 8px;
+      }
+
+      .admin-costs {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(148, 163, 184, 0.18);
+      }
+
+      .admin-costs-head {
+        display: flex;
+        gap: 14px;
+        align-items: end;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
+      .admin-costs-head h3 {
+        margin: 0 0 6px;
+        font-size: 20px;
+      }
+
+      .admin-cost-body {
+        display: grid;
+        gap: 12px;
+      }
+
+      .admin-cost-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .admin-cost-card,
+      .admin-cost-table {
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 8px;
+        background: rgba(9, 17, 31, 0.48);
+      }
+
+      .admin-cost-card {
+        padding: 12px;
+      }
+
+      .admin-cost-card strong {
+        display: block;
+        color: var(--text);
+        font-size: 20px;
+        line-height: 1.2;
+      }
+
+      .admin-cost-card span {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .admin-cost-table {
+        overflow: hidden;
+      }
+
+      .admin-cost-table h4 {
+        margin: 0;
+        padding: 12px;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+        font-size: 14px;
+      }
+
+      .admin-cost-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 90px 120px 140px;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 12px;
+        border-top: 1px solid rgba(148, 163, 184, 0.12);
+        color: #dbeafe;
+        font-size: 13px;
+      }
+
+      .admin-cost-row:first-of-type {
+        border-top: 0;
+      }
+
+      .admin-cost-row small {
+        display: block;
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: 11px;
+      }
+
+      .admin-repo {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px;
+        align-items: center;
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .admin-repo strong {
+        display: block;
+      }
+
+      .admin-repo span {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        display: none;
+        place-items: center;
+        padding: 20px;
+        background: rgba(2, 6, 23, 0.72);
+        backdrop-filter: blur(8px);
+      }
+
+      .modal-backdrop.active {
+        display: grid;
+      }
+
+      .modal {
+        width: min(420px, 100%);
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #111b2c;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+      }
+
+      .modal h2 {
+        margin-bottom: 8px;
+      }
+
+      .modal p {
+        margin: 0 0 16px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 14px;
+      }
+
+      .admin-error {
+        min-height: 20px;
+        margin-top: 10px;
+        color: var(--red);
+        font-size: 13px;
+      }
+
+      .notice {
+        margin-top: 18px;
+        padding: 14px 16px;
+        border: 1px solid rgba(244, 211, 94, 0.42);
         border-radius: 8px;
         background: rgba(244, 211, 94, 0.1);
-        color: #ffe99a;
+        color: #fde68a;
+        line-height: 1.6;
       }
 
-      .footer-brand {
-        display: flex;
-        justify-content: center;
-        margin-top: 36px;
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 12px;
+        margin: 22px 0;
+      }
+
+      .metric,
+      .rule,
+      .scoreboard,
+      .team {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(17, 27, 44, 0.86);
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+      }
+
+      .metric {
+        padding: 14px;
+      }
+
+      .metric strong {
+        display: block;
+        font-size: 25px;
+        line-height: 1.1;
+      }
+
+      .metric span {
         color: var(--muted);
         font-size: 13px;
       }
 
-      @media (max-width: 900px) {
-        .hero, .teams, .summary, .rules, .metric-grid { grid-template-columns: 1fr; }
-        .actions { justify-content: flex-start; }
-        .admin-form { grid-template-columns: 1fr; }
+      .scoreboard {
+        padding: 22px;
+        margin-bottom: 32px;
+      }
+
+      .scoreboard-head {
+        display: flex;
+        gap: 16px;
+        align-items: end;
+        justify-content: space-between;
+        margin-bottom: 18px;
+      }
+
+      .scoreboard-head h2 {
+        margin: 0 0 6px;
+      }
+
+      .scoreboard-head p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .auto-refresh {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 34px;
+        padding: 0 12px;
+        border: 1px solid rgba(68, 215, 208, 0.34);
+        border-radius: 999px;
+        background: rgba(68, 215, 208, 0.1);
+        color: #bff8f5;
+        font-size: 13px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .score-chart {
+        display: grid;
+        gap: 12px;
+      }
+
+      .score-row {
+        display: grid;
+        grid-template-columns: 86px minmax(0, 1fr) 156px;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .score-row-label {
+        color: #dbeafe;
+        font-size: 14px;
+        font-weight: 800;
+      }
+
+      .score-row-track {
+        height: 18px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(148, 163, 184, 0.16);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      }
+
+      .score-row-bar {
+        width: var(--score-width);
+        height: 100%;
+        min-width: 4px;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--cyan), var(--blue));
+      }
+
+      .score-row-value {
+        color: var(--text);
+        font-variant-numeric: tabular-nums;
+        font-weight: 900;
+        text-align: right;
+      }
+
+      .score-row-meta {
+        display: block;
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .section-title {
+        display: flex;
+        gap: 14px;
+        align-items: end;
+        justify-content: space-between;
+        margin: 36px 0 14px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 26px;
+      }
+
+      .section-title p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .rules-panel {
+        margin-top: 26px;
+      }
+
+      .rules-toggle {
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .rules-toggle summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        min-height: 54px;
+        padding: 0 16px;
+        color: #dbeafe;
+        cursor: pointer;
+        font-weight: 900;
+      }
+
+      .rules-toggle summary::after {
+        content: "열기";
+        color: var(--cyan);
+        font-size: 13px;
+      }
+
+      .rules-toggle[open] summary::after {
+        content: "닫기";
+      }
+
+      .rules {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 12px;
+        padding: 0 16px 16px;
+      }
+
+      .rule {
+        padding: 18px;
+        box-shadow: none;
+      }
+
+      .rule b {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .rule strong {
+        color: var(--cyan);
+      }
+
+      .rule p {
+        margin: 0;
+        color: #cbd5e1;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .teams {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+        gap: 16px;
+      }
+
+      .team {
+        position: relative;
+        padding: 20px;
+        overflow: hidden;
+      }
+
+      .team-header {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 18px;
+        align-items: start;
+        justify-content: space-between;
+        margin-bottom: 18px;
+      }
+
+      .team-name {
+        min-width: 0;
+      }
+
+      .team-name h3 {
+        margin: 0 0 8px;
+        font-size: 22px;
+      }
+
+      .team-name a {
+        color: #a5b4fc;
+        text-decoration: none;
+        word-break: break-all;
+        font-size: 14px;
+      }
+
+      .team-actions {
+        display: grid;
+        gap: 8px;
+        justify-items: end;
+      }
+
+      .score-block {
+        display: grid;
+        place-items: center;
+        width: 86px;
+        min-height: 72px;
+        border-radius: 8px;
+        border: 2px solid var(--cyan);
+        background: rgba(68, 215, 208, 0.12);
+        color: var(--text);
+        font-weight: 900;
+        flex: 0 0 auto;
+      }
+
+      .score-value {
+        font-size: 28px;
+        line-height: 1;
+      }
+
+      .score-label {
+        color: var(--cyan);
+        font-size: 11px;
+        font-weight: 800;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        padding: 0 10px;
+        border-radius: 999px;
+        background: rgba(90, 167, 255, 0.16);
+        color: #bfdbfe;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .bars {
+        display: grid;
+        gap: 10px;
+        margin: 18px 0 16px;
+      }
+
+      .member {
+        display: grid;
+        grid-template-columns: 130px minmax(0, 1fr) 46px;
+        gap: 10px;
+        align-items: center;
+        color: #dbeafe;
+        font-size: 14px;
+      }
+
+      .member.placeholder {
+        color: #64748b;
+      }
+
+      .bar-track {
+        height: 12px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(148, 163, 184, 0.18);
+      }
+
+      .bar {
+        height: 100%;
+        min-width: 2px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--cyan), var(--blue));
+      }
+
+      .team-metrics,
+      .components {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 8px;
+      }
+
+      .pill {
+        padding: 10px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .pill strong {
+        display: block;
+        color: var(--text);
+        font-size: 15px;
+      }
+
+      .pill span {
+        display: block;
+        margin-top: 2px;
+      }
+
+      .components {
+        margin-top: 10px;
+      }
+
+      .multipliers {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .team-details {
+        margin-top: 10px;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .team-details summary {
+        min-height: 42px;
+        padding: 0 12px;
+        color: #cbd5e1;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 900;
+        line-height: 42px;
+      }
+
+      .team-details-body {
+        padding: 0 12px 12px;
+      }
+
+      .danger {
+        margin-top: 12px;
+        color: var(--red);
+        font-size: 13px;
+      }
+
+      .quality {
+        margin-top: 14px;
+        padding: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .quality-head {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+
+      .quality-head strong {
+        font-size: 14px;
+      }
+
+      .quality-summary {
+        margin: 0 0 10px;
+        color: #cbd5e1;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .quality-items {
+        display: grid;
+        gap: 8px;
+      }
+
+      .quality-empty {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.6;
+      }
+
+      .quality-item {
+        display: grid;
+        grid-template-columns: minmax(64px, auto) minmax(90px, auto) minmax(0, 1fr);
+        gap: 8px;
+        align-items: center;
+        padding: 8px;
+        border-radius: 8px;
+        background: rgba(9, 17, 31, 0.55);
+        color: #dbeafe;
+        font-size: 12px;
+      }
+
+      .quality-target {
+        color: #a5b4fc;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .quality-target:hover {
+        text-decoration: underline;
+      }
+
+      .quality-label {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 24px;
+        padding: 0 8px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 900;
+        white-space: nowrap;
+      }
+
+      .quality-label.good {
+        background: rgba(123, 216, 143, 0.16);
+        color: #bbf7d0;
+      }
+
+      .quality-label.warning {
+        background: rgba(244, 211, 94, 0.16);
+        color: #fde68a;
+      }
+
+      .quality-label.danger {
+        background: rgba(255, 122, 122, 0.16);
+        color: #fecaca;
+      }
+
+      .quality-label.info {
+        background: rgba(90, 167, 255, 0.16);
+        color: #bfdbfe;
+      }
+
+      .empty {
+        padding: 28px;
+        border: 1px dashed var(--line);
+        border-radius: 8px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .footer-brand {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        margin-top: 36px;
+        padding-top: 22px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .footer-brand img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+
+      @media (max-width: 1100px) {
+        .hero,
+        .teams {
+          grid-template-columns: 1fr;
+        }
+
+        .summary {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .rules {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .scoreboard-head {
+          align-items: start;
+          flex-direction: column;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .shell {
+          width: min(100% - 24px, 1440px);
+          padding-top: 24px;
+        }
+
+        .brandbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .brand-badge {
+          white-space: normal;
+        }
+
+        .rules,
+        .admin-cost-grid,
+        .admin-form,
+        .admin-repo {
+          grid-template-columns: 1fr;
+        }
+
+        .admin-costs-head {
+          align-items: start;
+          flex-direction: column;
+        }
+
+        .admin-cost-row {
+          grid-template-columns: 1fr;
+        }
+
+        .summary,
+        .team-metrics,
+        .components,
+        .multipliers {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .team-header {
+          grid-template-columns: 1fr;
+        }
+
+        .team-actions {
+          grid-template-columns: auto auto;
+          justify-content: space-between;
+          justify-items: stretch;
+        }
+
+        .score-block {
+          width: 100%;
+        }
+
+        .quality-item {
+          grid-template-columns: 1fr;
+        }
+
+        .member {
+          grid-template-columns: minmax(86px, 116px) minmax(0, 1fr) 42px;
+          gap: 6px;
+        }
+
+        .score-row {
+          grid-template-columns: 74px minmax(0, 1fr);
+          gap: 10px;
+        }
+
+        .score-row-value {
+          text-align: left;
+        }
+
+        .metric strong {
+          font-size: 22px;
+        }
       }
     </style>
   </head>
   <body>
     <main class="shell">
       <header class="brandbar" aria-label="NxtCloud 교육 운영 도구">
-        <div class="brand-copy">
-          <strong>NxtCloud</strong>
-          <span>AI Workflow Classroom Operations</span>
+        <div class="brand-lockup">
+          <img class="brand-logo" src="/brand/nxtcloud-logo.png" alt="" />
+          <div class="brand-copy">
+            <strong>NxtCloud</strong>
+            <span>AI Workflow Classroom Operations</span>
+          </div>
         </div>
         <span class="brand-badge">NxtCloud 교육 운영 대시보드</span>
       </header>
@@ -260,35 +993,54 @@ const pageTitle = "AI Workflow Team Scoreboard";
           <p class="eyebrow">2026 국민대 AI Workflow</p>
           <h1>팀 PR 협업 점수판</h1>
           <p>
-            1~5팀 public GitHub repo를 조회해 branch, commit, push, PR, 동료 review, merge 흐름을 계산합니다.
-            원점수에 참여 균형과 품질 보정을 곱해 협업 사이클을 운영 관점으로 봅니다.
+            1~5팀 public GitHub repo를 조회해 branch, commit, push, PR, 동료 review, merge, sync 흐름을
+            얼마나 자주 반복했는지 계산합니다. 특히 내가 올린 PR에 다른 팀원이 검토를 남기고, 나도 동료 PR을
+            읽어주는 과정을 협업 사이클의 핵심으로 반영합니다.
           </p>
         </div>
         <div class="actions">
-          <button class="button secondary" id="admin-open" type="button">관리자 모드</button>
+          <button class="button secondary" id="admin-open">관리자 모드</button>
           <span class="status" id="status">대기 중</span>
         </div>
       </section>
-
       <div class="notice" id="notice" hidden></div>
 
       <section class="admin-panel" id="admin-panel">
         <div class="scoreboard-head">
           <div>
             <h2>관리자 모드</h2>
-            <p>조회할 GitHub public repo 링크를 등록하거나 제거합니다. 전체 최신화는 관리자 세션에서만 실행합니다.</p>
+            <p>조회할 GitHub public repo 링크를 등록하거나 제거합니다. GitHub API 호출량 관리를 위해 수동 전체 최신화는 관리자만 실행합니다.</p>
           </div>
-          <div class="actions">
+          <div class="modal-actions">
             <button class="button" id="admin-refresh-all" type="button">전체 최신화</button>
             <button class="button secondary" id="admin-logout" type="button">관리자 종료</button>
           </div>
         </div>
         <form class="admin-form" id="admin-form">
-          <input class="input" id="admin-repo-url" name="repoUrl" type="url" placeholder="https://github.com/nxtcloud-edu/2026-kookmin-ai-workflow-team1" autocomplete="off" />
+          <input
+            class="input"
+            id="admin-repo-url"
+            name="repoUrl"
+            type="url"
+            placeholder="https://github.com/nxtcloud-edu/2026-kookmin-ai-workflow-team1"
+            autocomplete="off"
+          />
           <button class="button" type="submit">repo 등록</button>
         </form>
         <div class="admin-error" id="admin-message"></div>
         <div class="admin-repos" id="admin-repos"></div>
+        <section class="admin-costs" id="admin-costs" hidden>
+          <div class="admin-costs-head">
+            <div>
+              <h3>운영 비용 추정</h3>
+              <p>Bedrock 품질 평가 호출 기준 추정치입니다. 이 정보는 관리자에게만 표시됩니다.</p>
+            </div>
+            <button class="button secondary" id="admin-cost-refresh" type="button">비용 새로고침</button>
+          </div>
+          <div class="admin-cost-body" id="admin-cost-body">
+            <div class="quality-empty">관리자 로그인 후 비용 추정치를 불러옵니다.</div>
+          </div>
+        </section>
       </section>
 
       <section class="summary" id="summary"></section>
@@ -297,7 +1049,7 @@ const pageTitle = "AI Workflow Team Scoreboard";
         <div class="scoreboard-head">
           <div>
             <h2>팀별 점수 현황</h2>
-            <p>보정점수 = 원점수 x 균형 보정 x 품질 보정입니다.</p>
+            <p>보정점수 = 원점수 × 균형 보정 × 품질 보정입니다. 원점수는 작은 PR 반복, 동료 검토가 붙은 PR, 커밋과 정리 상태를 계속 누적합니다.</p>
           </div>
           <span class="auto-refresh" id="auto-refresh">5분마다 자동 최신화</span>
         </div>
@@ -314,7 +1066,7 @@ const pageTitle = "AI Workflow Team Scoreboard";
           </div>
         </div>
         <div class="teams" id="teams">
-          <div class="empty">아직 조회한 데이터가 없습니다.</div>
+          <div class="empty">아직 조회한 데이터가 없습니다. 자동 최신화를 기다리거나 관리자 모드에서 전체 최신화를 실행해 주세요.</div>
         </div>
       </section>
 
@@ -322,26 +1074,54 @@ const pageTitle = "AI Workflow Team Scoreboard";
         <details class="rules-toggle">
           <summary>점수 기준 보기</summary>
           <div class="rules">
-            <article class="rule"><b>PR 사이클 누적</b><p>PR open, merge, 동료 review/comment를 협업 사이클로 누적합니다.</p></article>
-            <article class="rule"><b>커밋 점수 누적</b><p>팀원 계정으로 인식된 커밋을 작은 반복 훈련으로 반영합니다.</p></article>
-            <article class="rule"><b>상호 검토 누적</b><p>자기 PR이 아닌 동료 PR에 남긴 review/comment를 반영합니다.</p></article>
-            <article class="rule"><b>정리 점수</b><p>민감 파일 의심과 열린 PR 정리 상태를 확인합니다.</p></article>
-            <article class="rule"><b>기여 균형</b><p>한 명에게 몰리지 않고 팀원 비중이 비슷할수록 보정이 올라갑니다.</p></article>
-            <article class="rule"><b>품질 보정</b><p>리뷰 부족, 위험 변경, 메시지 모호성을 약한 보정과 라벨로 표시합니다.</p></article>
+            <article class="rule">
+              <b>PR 사이클 <strong>누적</strong></b>
+              <p>PR을 열면 +4점, merge되면 +6점을 추가합니다. 다른 팀원의 review/comment가 붙은 PR은 +10점을 더해 온전한 협업 사이클로 봅니다.</p>
+            </article>
+            <article class="rule">
+              <b>커밋 점수 <strong>누적</strong></b>
+              <p>팀원 계정으로 인식된 커밋 1개당 +2점입니다. 위쪽의 커밋 수는 개수, 세부 지표의 커밋 점수는 환산 점수입니다.</p>
+            </article>
+            <article class="rule">
+              <b>상호 검토 <strong>누적</strong></b>
+              <p>다른 팀원의 PR에 남긴 review는 +10점, comment는 +2점입니다. 자기 PR에 남긴 활동은 검토 점수에서 제외합니다.</p>
+            </article>
+            <article class="rule">
+              <b>정리 점수 <strong>최대 +5</strong></b>
+              <p>민감 파일 의심이 없으면 +3점, PR이 open 또는 merge 상태로 정리되어 있으면 +2점입니다.</p>
+            </article>
+            <article class="rule">
+              <b>기여 균형 <strong>x0.70~1.15</strong></b>
+              <p>커밋, PR, 리뷰, 댓글 활동 포인트의 팀원별 비중이 비슷할수록 올라가고, 한 명에게 몰리면 낮아집니다.</p>
+            </article>
+            <article class="rule">
+              <b>품질 보정 <strong>x0.90~1.08</strong></b>
+              <p>최근 PR·커밋 설명, 동료 검토 여부, 더미 의심, 위험 변경을 Bedrock이 라벨링합니다. 라벨은 순위를 크게 흔들기보다 다시 볼 지점을 알려주는 약한 보정으로 반영합니다.</p>
+            </article>
           </div>
         </details>
       </section>
 
-      <footer class="footer-brand">NxtCloud Learning Ops · GitHub PR 협업 훈련 현황판</footer>
+      <footer class="footer-brand">
+        <img src="/brand/nxtcloud-logo.png" alt="" />
+        <span>NxtCloud Learning Ops · GitHub PR 협업 훈련 현황판</span>
+      </footer>
     </main>
 
-    <div class="modal-backdrop" id="admin-modal" role="dialog" aria-modal="true" hidden>
-      <form class="modal admin-panel active" id="admin-login-form">
-        <h2>관리자 로그인</h2>
+    <div class="modal-backdrop" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+      <form class="modal" id="admin-login-form">
+        <h2 id="admin-title">관리자 로그인</h2>
         <p>repo 등록과 삭제는 관리자만 할 수 있습니다.</p>
-        <input class="input" id="admin-password" name="password" type="password" placeholder="관리자 비밀번호" autocomplete="current-password" />
+        <input
+          class="input"
+          id="admin-password"
+          name="password"
+          type="password"
+          placeholder="관리자 비밀번호"
+          autocomplete="current-password"
+        />
         <div class="admin-error" id="admin-login-error"></div>
-        <div class="actions">
+        <div class="modal-actions">
           <button class="button secondary" id="admin-close" type="button">닫기</button>
           <button class="button" type="submit">로그인</button>
         </div>
@@ -349,182 +1129,482 @@ const pageTitle = "AI Workflow Team Scoreboard";
     </div>
 
     <script>
-      const state = { snapshot: null, isAdmin: false };
-      const statusEl = document.querySelector("#status");
       const summaryEl = document.querySelector("#summary");
-      const chartEl = document.querySelector("#score-chart");
       const teamsEl = document.querySelector("#teams");
+      const statusEl = document.querySelector("#status");
       const noticeEl = document.querySelector("#notice");
-      const adminPanel = document.querySelector("#admin-panel");
+      const scoreChartEl = document.querySelector("#score-chart");
+      const autoRefreshEl = document.querySelector("#auto-refresh");
+      const adminOpenButton = document.querySelector("#admin-open");
       const adminModal = document.querySelector("#admin-modal");
-      const adminRepos = document.querySelector("#admin-repos");
+      const adminCloseButton = document.querySelector("#admin-close");
+      const adminLoginForm = document.querySelector("#admin-login-form");
+      const adminLoginError = document.querySelector("#admin-login-error");
+      const adminPanel = document.querySelector("#admin-panel");
+      const adminRefreshAllButton = document.querySelector("#admin-refresh-all");
+      const adminLogoutButton = document.querySelector("#admin-logout");
+      const adminForm = document.querySelector("#admin-form");
+      const adminRepoInput = document.querySelector("#admin-repo-url");
       const adminMessage = document.querySelector("#admin-message");
+      const adminReposEl = document.querySelector("#admin-repos");
+      const adminCostsPanel = document.querySelector("#admin-costs");
+      const adminCostBody = document.querySelector("#admin-cost-body");
+      const adminCostRefreshButton = document.querySelector("#admin-cost-refresh");
+      const autoRefreshMs = 5 * 60 * 1000;
+      let nextAutoRefreshAt = Date.now() + autoRefreshMs;
 
-      document.querySelector("#admin-open").addEventListener("click", () => {
-        if (state.isAdmin) {
-          adminPanel.classList.toggle("active");
-          return;
-        }
-        adminModal.hidden = false;
-      });
-      document.querySelector("#admin-close").addEventListener("click", () => { adminModal.hidden = true; });
-      document.querySelector("#admin-refresh-all").addEventListener("click", () => loadScore({ force: true }));
-      document.querySelector("#admin-logout").addEventListener("click", logoutAdmin);
-      document.querySelector("#admin-login-form").addEventListener("submit", loginAdmin);
-      document.querySelector("#admin-form").addEventListener("submit", addRepo);
+      adminOpenButton.addEventListener("click", openAdminModal);
+      adminCloseButton.addEventListener("click", closeAdminModal);
+      adminLoginForm.addEventListener("submit", loginAdmin);
+      adminRefreshAllButton.addEventListener("click", () => refresh());
+      adminLogoutButton.addEventListener("click", logoutAdmin);
+      adminForm.addEventListener("submit", addAdminRepo);
+      adminCostRefreshButton.addEventListener("click", loadAdminCosts);
+      window.setInterval(() => refresh(), autoRefreshMs);
+      window.setInterval(renderAutoRefreshStatus, 1000);
 
-      loadScore();
-      setInterval(() => loadScore(), 5 * 60 * 1000);
-
-      async function loadScore({ force = false } = {}) {
-        statusEl.textContent = force ? "최신화 중" : "조회 중";
-        try {
-          const response = await fetch("/api/score.json", {
-            method: force ? "POST" : "GET",
-            headers: force ? { "content-type": "application/json" } : undefined,
-            body: force ? "{}" : undefined
-          });
-          state.snapshot = await response.json();
-          renderSnapshot(state.snapshot);
-          statusEl.textContent = `업데이트 ${formatDate(state.snapshot.refreshedAt)}`;
-        } catch (error) {
-          statusEl.textContent = "조회 실패";
-          showNotice(error.message);
-        }
+      async function load() {
+        setStatus("불러오는 중");
+        const response = await fetch("/api/score.json");
+        render(await response.json());
       }
 
-      function renderSnapshot(snapshot) {
-        const teams = [...(snapshot.teams ?? [])].sort((a, b) => (b.adjustedScore ?? b.score ?? 0) - (a.adjustedScore ?? a.score ?? 0));
-        const maxScore = Math.max(1, ...teams.map((team) => team.adjustedScore ?? team.score ?? 0));
-        renderSummary(snapshot.summary);
-        chartEl.innerHTML = teams.map((team) => {
-          const score = team.adjustedScore ?? team.score ?? 0;
-          return `<div class="bar-row"><strong>${escapeHtml(team.label)}</strong><div class="bar-track"><div class="bar-fill" style="width:${Math.round(score / maxScore * 100)}%"></div></div><span>${score}</span></div>`;
-        }).join("") || `<div class="empty">아직 조회한 데이터가 없습니다.</div>`;
-        teamsEl.innerHTML = teams.map(renderTeam).join("") || `<div class="empty">아직 조회한 데이터가 없습니다.</div>`;
+      async function refresh(teamId) {
+        setStatus(teamId ? `${teamId} 최신화 중` : "전체 최신화 중");
+        const response = await fetch("/api/score.json", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ teamId })
+        });
+        render(await response.json());
       }
 
-      function renderSummary(summary = {}) {
-        const items = [
-          ["활성 팀", `${summary.activeTeams ?? 0} / ${summary.teamCount ?? 0}`],
-          ["평균 점수", summary.averageScore ?? 0],
-          ["총 커밋", summary.totalCommits ?? 0],
-          ["총 PR", summary.totalPulls ?? 0],
-          ["품질 경고", `${summary.qualityWarnings ?? 0} / ${summary.qualityLabels ?? 0}`]
-        ];
-        summaryEl.innerHTML = items.map(([label, value]) => `<div class="metric"><span>${label}</span><strong>${value}</strong></div>`).join("");
+      function render(snapshot) {
+        renderSummary(snapshot.summary, snapshot.refreshedAt);
+        renderScoreChart(snapshot.teams);
+        renderTeams(snapshot.teams);
+        renderNotice();
+        nextAutoRefreshAt = Date.now() + autoRefreshMs;
+        renderAutoRefreshStatus();
+        setStatus(`마지막 갱신 ${formatDate(snapshot.refreshedAt)}`);
+        if (adminPanel.classList.contains("active")) loadAdminCosts().catch(() => {});
       }
 
-      function renderTeam(team) {
-        const metrics = team.metrics ?? {};
-        const quality = team.quality ?? {};
-        const statusClass = team.status === "확인 필요" ? "danger" : team.status === "편중" || team.status === "리뷰 부족" ? "warning" : "";
-        return `
-          <article class="team-card">
-            <div class="team-top">
-              <div>
-                <h3>${escapeHtml(team.label)}</h3>
-                <div class="team-repo">${escapeHtml(team.repo)}</div>
-              </div>
-              <div>
-                <div class="team-score">${team.adjustedScore ?? team.score ?? 0}</div>
-                <span class="pill ${statusClass}">${escapeHtml(team.status ?? "대기")}</span>
-              </div>
-            </div>
-            <div class="metric-grid">
-              ${mini("커밋", metrics.commits)}
-              ${mini("PR", metrics.pulls)}
-              ${mini("Merge", metrics.mergedPulls)}
-              ${mini("동료검토", `${metrics.peerReviewCoverage ?? 0}%`)}
-            </div>
-            <div class="members">${(team.members ?? []).map(renderMember).join("")}</div>
-            <div class="quality">
-              <b>${escapeHtml(quality.status ?? "대기")}</b>
-              <p>${escapeHtml(quality.summary ?? "품질 평가 정보가 없습니다.")}</p>
-            </div>
-          </article>
-        `;
+      function openAdminModal() {
+        adminLoginError.textContent = "";
+        adminModal.classList.add("active");
+        document.querySelector("#admin-password").focus();
       }
 
-      function mini(label, value = 0) {
-        return `<div class="mini"><span>${label}</span><strong>${value}</strong></div>`;
-      }
-
-      function renderMember(member) {
-        const share = Number(member.share ?? 0);
-        return `<div class="member"><span>${escapeHtml(member.login)}</span><div class="bar-track"><div class="bar-fill" style="width:${share}%"></div></div><strong>${share}%</strong></div>`;
+      function closeAdminModal() {
+        adminModal.classList.remove("active");
+        adminLoginForm.reset();
       }
 
       async function loginAdmin(event) {
         event.preventDefault();
-        const password = new FormData(event.currentTarget).get("password");
+        adminLoginError.textContent = "";
+
         const response = await fetch("/api/admin/login.json", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ password })
+          body: JSON.stringify({ password: new FormData(adminLoginForm).get("password") })
         });
         const payload = await response.json();
-        if (!payload.ok) {
-          document.querySelector("#admin-login-error").textContent = payload.error ?? "로그인 실패";
+
+        if (!response.ok || !payload.ok) {
+          adminLoginError.textContent = payload.error ?? "로그인에 실패했습니다.";
           return;
         }
-        state.isAdmin = true;
-        adminModal.hidden = true;
+
+        closeAdminModal();
         adminPanel.classList.add("active");
-        await loadRepos();
+        await loadAdminRepos();
+        await loadAdminCosts();
       }
 
       async function logoutAdmin() {
         await fetch("/api/admin/logout.json", { method: "POST" });
-        state.isAdmin = false;
         adminPanel.classList.remove("active");
+        adminReposEl.innerHTML = "";
+        adminMessage.textContent = "";
+        adminCostsPanel.hidden = true;
+        adminCostBody.innerHTML = `<div class="quality-empty">관리자 로그인 후 비용 추정치를 불러옵니다.</div>`;
       }
 
-      async function loadRepos() {
+      async function loadAdminRepos() {
+        adminMessage.textContent = "등록 목록을 불러오는 중";
         const response = await fetch("/api/admin/repos.json");
         const payload = await response.json();
-        if (!payload.ok) {
-          adminMessage.textContent = payload.error ?? "repo 조회 실패";
-          return;
-        }
-        renderRepos(payload.repos ?? []);
-      }
-
-      async function addRepo(event) {
-        event.preventDefault();
-        const repoUrl = new FormData(event.currentTarget).get("repoUrl");
-        const response = await fetch("/api/admin/repos.json", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ repoUrl })
-        });
-        const payload = await response.json();
-        if (!payload.ok) {
-          adminMessage.textContent = payload.error ?? "repo 등록 실패";
+        if (!response.ok || !payload.ok) {
+          adminMessage.textContent = payload.error ?? "등록 목록을 불러오지 못했습니다.";
           return;
         }
         adminMessage.textContent = "";
-        event.currentTarget.reset();
-        renderRepos(payload.repos ?? []);
+        renderAdminRepos(payload.repos);
       }
 
-      function renderRepos(repos) {
-        adminRepos.innerHTML = repos.map((repo) => `<div class="admin-repo"><span>${escapeHtml(repo.repo)}</span><span>${escapeHtml(repo.source)}</span></div>`).join("");
+      async function addAdminRepo(event) {
+        event.preventDefault();
+        adminMessage.textContent = "";
+
+        const response = await fetch("/api/admin/repos.json", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ repoUrl: adminRepoInput.value })
+        });
+        const payload = await response.json();
+
+        if (!response.ok || !payload.ok) {
+          adminMessage.textContent = payload.error ?? "repo 등록에 실패했습니다.";
+          return;
+        }
+
+        adminRepoInput.value = "";
+        adminMessage.textContent = "repo를 등록했습니다. 전체 최신화를 누르면 점수판에 반영됩니다.";
+        renderAdminRepos(payload.repos);
       }
 
-      function showNotice(message) {
-        noticeEl.hidden = false;
-        noticeEl.textContent = message;
+      async function removeAdminRepo(id) {
+        adminMessage.textContent = "";
+        const response = await fetch("/api/admin/repos.json", {
+          method: "DELETE",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ id })
+        });
+        const payload = await response.json();
+
+        if (!response.ok || !payload.ok) {
+          adminMessage.textContent = payload.error ?? "repo 삭제에 실패했습니다.";
+          return;
+        }
+
+        adminMessage.textContent = "repo를 제거했습니다. 전체 최신화를 누르면 점수판에 반영됩니다.";
+        renderAdminRepos(payload.repos);
       }
 
-      function formatDate(value) {
-        if (!value) return "대기";
-        return new Intl.DateTimeFormat("ko-KR", { dateStyle: "short", timeStyle: "short" }).format(new Date(value));
+      function renderAdminRepos(repos) {
+        adminReposEl.innerHTML = repos.map((repo) => `
+          <div class="admin-repo">
+            <div>
+              <strong>${escapeHtml(repo.label)}</strong>
+              <span>${escapeHtml(repo.repo)} · ${repo.source === "default" ? "기본 등록" : "관리자 등록"}</span>
+            </div>
+            <button class="button secondary" data-remove-repo="${escapeAttribute(repo.id)}" type="button">제거</button>
+          </div>
+        `).join("");
+
+        adminReposEl.querySelectorAll("[data-remove-repo]").forEach((button) => {
+          button.addEventListener("click", () => removeAdminRepo(button.dataset.removeRepo));
+        });
+      }
+
+      async function loadAdminCosts() {
+        adminCostsPanel.hidden = false;
+        adminCostBody.innerHTML = `<div class="quality-empty">비용 정보를 불러오는 중</div>`;
+
+        const response = await fetch("/api/admin/costs.json");
+        const payload = await response.json();
+
+        if (!response.ok || !payload.ok) {
+          adminCostBody.innerHTML = `<div class="admin-error">${escapeHtml(payload.error ?? "비용 정보를 불러오지 못했습니다.")}</div>`;
+          return;
+        }
+
+        renderAdminCosts(payload.costs);
+      }
+
+      function renderAdminCosts(costs) {
+        const totals = costs?.totals ?? {};
+        const byTeam = Array.isArray(costs?.byTeam) ? costs.byTeam : [];
+        const recentCalls = Array.isArray(costs?.recentCalls) ? costs.recentCalls : [];
+        const model = costs?.modelId ?? "unknown";
+        const price = costs?.price ?? {};
+
+        adminCostBody.innerHTML = `
+          <div class="admin-cost-grid">
+            ${costMetric("총 추정 비용", formatUsd(totals.estimatedCostUsd), costs?.currency ?? "USD")}
+            ${costMetric("평가 호출", `${totals.calls ?? 0}회`, "캐시 적중은 제외")}
+            ${costMetric("입력 토큰", formatTokenCount(totals.inputTokens), "Bedrock usage")}
+            ${costMetric("출력 토큰", formatTokenCount(totals.outputTokens), "Bedrock usage")}
+          </div>
+          <div class="admin-cost-table">
+            <h4>팀별 비용 추정</h4>
+            ${
+              byTeam.length
+                ? byTeam.map((team) => `
+                    <div class="admin-cost-row">
+                      <div>
+                        <strong>${escapeHtml(team.teamLabel ?? team.teamId)}</strong>
+                        <small>${escapeHtml(team.repo ?? "")}</small>
+                      </div>
+                      <span>${team.calls ?? 0}회</span>
+                      <span>${formatTokenCount(team.totalTokens)}</span>
+                      <strong>${formatUsd(team.estimatedCostUsd)}</strong>
+                    </div>
+                  `).join("")
+                : `<div class="quality-empty" style="padding:12px">아직 기록된 Bedrock 호출 비용이 없습니다.</div>`
+            }
+          </div>
+          <div class="admin-cost-table">
+            <h4>최근 평가 호출</h4>
+            ${
+              recentCalls.length
+                ? recentCalls.slice(0, 8).map((call) => `
+                    <div class="admin-cost-row">
+                      <div>
+                        <strong>${escapeHtml(call.teamLabel ?? call.teamId)}</strong>
+                        <small>${formatDate(call.evaluatedAt)}</small>
+                      </div>
+                      <span>${formatTokenCount(call.usage?.inputTokens)} in</span>
+                      <span>${formatTokenCount(call.usage?.outputTokens)} out</span>
+                      <strong>${formatUsd(call.estimatedCostUsd)}</strong>
+                    </div>
+                  `).join("")
+                : `<div class="quality-empty" style="padding:12px">최근 평가 호출이 없습니다.</div>`
+            }
+          </div>
+          <div class="quality-empty">
+            모델: ${escapeHtml(model)} · 단가: 입력 ${formatUsdPerMillion(price.inputPer1M)} / 출력 ${formatUsdPerMillion(price.outputPer1M)}
+          </div>
+        `;
+      }
+
+      function costMetric(label, value, hint) {
+        return `
+          <div class="admin-cost-card">
+            <strong>${escapeHtml(value)}</strong>
+            <span>${escapeHtml(label)} · ${escapeHtml(hint)}</span>
+          </div>
+        `;
+      }
+
+      function renderSummary(summary, refreshedAt) {
+        const items = [
+          ["활성 팀", `${summary.activeTeams} / ${summary.teamCount}`],
+          ["총 PR", summary.totalPulls],
+          ["Merge PR", summary.totalMergedPulls],
+          ["품질 경고", `${summary.qualityWarnings} / ${summary.qualityLabels}`],
+          ["갱신 시간", formatTime(refreshedAt)]
+        ];
+
+        summaryEl.innerHTML = items.map(([label, value]) => `
+          <article class="metric">
+            <strong>${value}</strong>
+            <span>${label}</span>
+          </article>
+        `).join("");
+      }
+
+      function renderScoreChart(teams) {
+        if (!teams.length) {
+          scoreChartEl.innerHTML = `<div class="empty">아직 조회한 데이터가 없습니다.</div>`;
+          return;
+        }
+
+        const sortedTeams = [...teams].sort((first, second) => getAdjustedScore(second) - getAdjustedScore(first));
+        const maxScore = Math.max(...sortedTeams.map(getAdjustedScore), 0);
+        scoreChartEl.innerHTML = sortedTeams.map((team) => `
+          <div class="score-row">
+            <span class="score-row-label">${team.label}</span>
+            <div class="score-row-track" aria-label="${team.label} 보정 ${getAdjustedScore(team)}점">
+              <div class="score-row-bar" style="--score-width:${getScoreWidth(team, maxScore)}%"></div>
+            </div>
+            <span class="score-row-value">
+              ${getAdjustedScore(team)}
+              <span class="score-row-meta">원 ${team.rawScore ?? 0} · ${formatMultiplierLabel(team, team.multipliers?.total)}</span>
+            </span>
+          </div>
+        `).join("");
+      }
+
+      function renderTeams(teams) {
+        teamsEl.innerHTML = teams.map((team) => `
+          <article class="team">
+            <div class="team-header">
+              <div class="team-name">
+                <h3>${team.label} <span class="badge">${team.status}</span></h3>
+                <a href="https://github.com/${team.repo}" target="_blank" rel="noreferrer">${team.repo}</a>
+              </div>
+              <div class="team-actions">
+                <div class="score-block" aria-label="${team.label} 보정점수">
+                  <span class="score-value">${getAdjustedScore(team)}</span>
+                  <span class="score-label">보정점수</span>
+                </div>
+              </div>
+            </div>
+            <div class="bars">
+              ${team.members.map((member) => `
+                <div class="member ${member.placeholder ? "placeholder" : ""}">
+                  <span>${member.login}</span>
+                  <div class="bar-track"><div class="bar" style="width:${member.share}%"></div></div>
+                  <span>${member.share}%</span>
+                </div>
+              `).join("")}
+            </div>
+            <div class="team-metrics">
+              ${metric("원점수", team.rawScore ?? 0)}
+              ${metric("커밋 수", team.metrics.commits)}
+              ${metric("PR 수", team.metrics.pulls)}
+              ${metric("Merge 수", team.metrics.mergedPulls)}
+              ${metric("동료 검토 PR", team.metrics.peerReviewedPulls ?? "재집계 대기")}
+            </div>
+            ${renderQuality(team.quality)}
+            <details class="team-details">
+              <summary>세부 지표 보기</summary>
+              <div class="team-details-body">
+                <div class="components">
+                  ${metric("PR 사이클 점수", team.components.prCycle ?? team.components.prFlow)}
+                  ${metric("커밋 점수", team.components.commits ?? team.components.commitPractice)}
+                  ${metric("동료 검토 점수", team.components.peerReview ?? team.components.review)}
+                  ${metric("정리 점수", team.components.hygiene)}
+                  ${metric("검토율", formatPeerReviewCoverage(team.metrics.peerReviewCoverage))}
+                  ${metric("동료 댓글 수", team.metrics.comments)}
+                </div>
+                <div class="multipliers">
+                  ${metric("균형 보정", formatMultiplierLabel(team, team.multipliers?.balance))}
+                  ${metric("품질 보정", formatMultiplierLabel(team, team.multipliers?.quality))}
+                  ${metric("최종 배율", formatMultiplierLabel(team, team.multipliers?.total))}
+                </div>
+              </div>
+            </details>
+            ${team.metrics.riskyFiles.length ? `<div class="danger">민감 파일 의심: ${team.metrics.riskyFiles.map((file) => file.filename).join(", ")}</div>` : ""}
+          </article>
+        `).join("");
+
+      }
+
+      function metric(label, value) {
+        return `<div class="pill"><strong>${value}</strong><span>${label}</span></div>`;
+      }
+
+      function formatPeerReviewCoverage(value) {
+        return Number.isFinite(Number(value)) ? `${Number(value)}%` : "재집계 대기";
+      }
+
+      function getAdjustedScore(team) {
+        return team.adjustedScore ?? team.score ?? 0;
+      }
+
+      function getScoreWidth(team, maxScore) {
+        if (maxScore <= 0) return 2;
+        return Math.max(4, Math.round((getAdjustedScore(team) / maxScore) * 100));
+      }
+
+      function formatMultiplier(value) {
+        return Number(value ?? 0).toFixed(2);
+      }
+
+      function formatMultiplierLabel(team, value) {
+        if ((team.rawScore ?? 0) <= 0) return "대기";
+        return `x${formatMultiplier(value)}`;
+      }
+
+      function renderQuality(quality) {
+        if (!quality) return "";
+
+        const status = escapeHtml(quality.status ?? "대기");
+        const severity = normalizeSeverity(quality.status);
+        const summary = escapeHtml(quality.summary ?? "평가 정보가 없습니다.");
+        const items = Array.isArray(quality.items) ? quality.items : [];
+        const itemHtml = items.length
+          ? items.map((item) => renderQualityItem(item)).join("")
+          : `<div class="quality-empty">최근 평가할 PR/커밋이 없습니다.</div>`;
+
+        return `
+          <div class="quality">
+            <div class="quality-head">
+              <strong>AI 품질 라벨</strong>
+              <span class="quality-label ${severity}">${status}</span>
+            </div>
+            <p class="quality-summary">${summary}${quality.cached ? " · 캐시" : ""}</p>
+            <div class="quality-items">${itemHtml}</div>
+          </div>
+        `;
+      }
+
+      function renderQualityItem(item) {
+        const target = escapeHtml(item.target ?? "-");
+        const label = escapeHtml(item.label ?? "사람 확인 필요");
+        const severity = normalizeSeverity(item.label, item.severity);
+        const reason = escapeHtml(item.reason ?? "");
+        const targetHtml = item.url
+          ? `<a class="quality-target" href="${escapeAttribute(item.url)}" target="_blank" rel="noreferrer">${target}</a>`
+          : `<span class="quality-target">${target}</span>`;
+
+        return `
+          <div class="quality-item">
+            ${targetHtml}
+            <span class="quality-label ${severity}">${label}</span>
+            <span>${reason}</span>
+          </div>
+        `;
+      }
+
+      function normalizeSeverity(label, explicitSeverity) {
+        if (["good", "warning", "danger", "info"].includes(explicitSeverity)) return explicitSeverity;
+        if (label === "정상") return "good";
+        if (label === "더미 의심") return "danger";
+        if (label === "대기") return "info";
+        return "warning";
       }
 
       function escapeHtml(value) {
-        return String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
       }
+
+      function escapeAttribute(value) {
+        return escapeHtml(value).replaceAll("`", "&#096;");
+      }
+
+      function setStatus(message) {
+        statusEl.textContent = message;
+      }
+
+      function renderNotice() {
+        noticeEl.hidden = true;
+        noticeEl.textContent = "";
+      }
+
+      function renderAutoRefreshStatus() {
+        const remainingMs = Math.max(0, nextAutoRefreshAt - Date.now());
+        const minutes = Math.floor(remainingMs / 60000);
+        const seconds = Math.floor((remainingMs % 60000) / 1000);
+        autoRefreshEl.textContent = `자동 최신화 ${minutes}:${String(seconds).padStart(2, "0")} 후`;
+      }
+
+      function formatDate(value) {
+        if (!value) return "없음";
+        return new Intl.DateTimeFormat("ko-KR", { dateStyle: "short", timeStyle: "medium" }).format(new Date(value));
+      }
+
+      function formatTime(value) {
+        if (!value) return "없음";
+        return new Intl.DateTimeFormat("ko-KR", { hour: "2-digit", minute: "2-digit" }).format(new Date(value));
+      }
+
+      function formatUsd(value) {
+        const amount = Number(value ?? 0);
+        return `$${amount.toFixed(amount >= 1 ? 2 : 6)}`;
+      }
+
+      function formatUsdPerMillion(value) {
+        return `${formatUsd(value)} / 1M tokens`;
+      }
+
+      function formatTokenCount(value) {
+        return new Intl.NumberFormat("ko-KR").format(Number(value ?? 0));
+      }
+
+      load().catch((error) => {
+        console.error(error);
+        setStatus("조회 실패");
+      });
     </script>
   </body>
 </html>

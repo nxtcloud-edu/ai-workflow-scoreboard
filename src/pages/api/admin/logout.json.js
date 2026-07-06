@@ -1,6 +1,6 @@
-import { clearAdminSession, json } from "../../../lib/admin-auth.js";
+import { clearAdminCookie, json } from "../../../lib/admin-auth.js";
 
 export async function POST({ cookies }) {
-  clearAdminSession(cookies);
+  clearAdminCookie(cookies);
   return json({ ok: true });
 }

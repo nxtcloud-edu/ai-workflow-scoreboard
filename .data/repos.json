@@ -1,0 +1,64 @@
+{
+  "repos": [
+    {
+      "id": "team1",
+      "label": "Team 1",
+      "repo": "nxtcloud-edu/2026-kookmin-ai-workflow-team1",
+      "expectedMembers": 3,
+      "expectedLogins": [
+        "ChoHyeonChan",
+        "juneddoha",
+        "junseok0929"
+      ],
+      "source": "default"
+    },
+    {
+      "id": "team2",
+      "label": "Team 2",
+      "repo": "nxtcloud-edu/2026-kookmin-ai-workflow-team2",
+      "expectedMembers": 3,
+      "expectedLogins": [
+        "k4nul",
+        "asakicode",
+        "pahaha404"
+      ],
+      "source": "default"
+    },
+    {
+      "id": "team3",
+      "label": "Team 3",
+      "repo": "nxtcloud-edu/2026-kookmin-ai-workflow-team3",
+      "expectedMembers": 3,
+      "expectedLogins": [
+        "codeNBogus",
+        "KMU-jeonghj",
+        "williamjeon7"
+      ],
+      "source": "default"
+    },
+    {
+      "id": "team4",
+      "label": "Team 4",
+      "repo": "nxtcloud-edu/2026-kookmin-ai-workflow-team4",
+      "expectedMembers": 3,
+      "expectedLogins": [
+        "2wodnjs7",
+        "Chyopriushy",
+        "xxrthscrclz"
+      ],
+      "source": "default"
+    },
+    {
+      "id": "team5",
+      "label": "Team 5",
+      "repo": "nxtcloud-edu/2026-kookmin-ai-workflow-team5",
+      "expectedMembers": 3,
+      "expectedLogins": [
+        "kyjkmu1828-coder",
+        "aldfula",
+        "HyeonWooNa0861"
+      ],
+      "source": "default"
+    }
+  ]
+}

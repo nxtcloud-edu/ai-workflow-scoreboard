@@ -4,7 +4,6 @@ import { dirname, join } from "node:path";
 const OWNER = "nxtcloud-edu";
 const TEAM_COUNT = 5;
 const STORE_FILE = process.env.SCOREBOARD_REPOS_FILE ?? join(process.cwd(), ".data", "repos.json");
-
 const TEAM_MEMBERS = {
   team1: ["ChoHyeonChan", "juneddoha", "junseok0929"],
   team2: ["k4nul", "asakicode", "pahaha404"],
@@ -12,8 +11,7 @@ const TEAM_MEMBERS = {
   team4: ["2wodnjs7", "Chyopriushy", "xxrthscrclz"],
   team5: ["kyjkmu1828-coder", "aldfula", "HyeonWooNa0861"]
 };
-
-const TEAM_ALIASES = {
+const TEAM_MEMBER_ALIASES = {
   team5: {
     "나현우": "HyeonWooNa0861"
   }
@@ -24,14 +22,13 @@ export function getDefaultScoreboardRepos() {
     const teamNumber = index + 1;
     const id = `team${teamNumber}`;
     const expectedLogins = TEAM_MEMBERS[id] ?? [];
-
     return {
       id,
       label: `Team ${teamNumber}`,
       repo: `${OWNER}/2026-kookmin-ai-workflow-team${teamNumber}`,
       expectedMembers: expectedLogins.length,
       expectedLogins,
-      memberAliases: TEAM_ALIASES[id] ?? {},
+      memberAliases: TEAM_MEMBER_ALIASES[id] ?? {},
       source: "default"
     };
   });
@@ -57,7 +54,6 @@ export async function addScoreboardRepo({ repo, label }) {
     repo: normalizedRepo,
     expectedMembers: 0,
     expectedLogins: [],
-    memberAliases: {},
     source: "admin"
   };
   const nextRepos = [...repos, nextRepo];
@@ -118,15 +114,18 @@ function normalizeRepos(repos) {
     .map((repo) => {
       const normalizedRepo = normalizeRepoName(repo.repo);
       if (!normalizedRepo) return null;
-      const expectedLogins = Array.isArray(repo.expectedLogins) ? repo.expectedLogins : [];
-
+      const id = repo.id || createRepoId(normalizedRepo);
+      const configuredAliases = repo.memberAliases && typeof repo.memberAliases === "object" ? repo.memberAliases : {};
       return {
-        id: repo.id || createRepoId(normalizedRepo),
+        id,
         label: repo.label || normalizedRepo,
         repo: normalizedRepo,
-        expectedMembers: expectedLogins.length,
-        expectedLogins,
-        memberAliases: repo.memberAliases ?? {},
+        expectedMembers: Array.isArray(repo.expectedLogins) ? repo.expectedLogins.length : 0,
+        expectedLogins: Array.isArray(repo.expectedLogins) ? repo.expectedLogins : [],
+        memberAliases: {
+          ...(TEAM_MEMBER_ALIASES[id] ?? {}),
+          ...configuredAliases
+        },
         source: repo.source || "admin"
       };
     })

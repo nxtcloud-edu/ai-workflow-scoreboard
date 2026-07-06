@@ -1,28 +1,44 @@
-const SESSION_COOKIE = "scoreboard_admin";
-const SESSION_VALUE = "ok";
+import { createHmac, timingSafeEqual } from "node:crypto";
 
-export function requireAdmin(cookies) {
-  if (!process.env.SCOREBOARD_ADMIN_PASSWORD) return json({ ok: false, error: "Admin password is not configured." }, 503);
-  if (cookies.get(SESSION_COOKIE)?.value === SESSION_VALUE) return null;
-  return json({ ok: false, error: "Unauthorized" }, 401);
+const COOKIE_NAME = "scoreboard_admin";
+const ADMIN_PASSWORD = process.env.SCOREBOARD_ADMIN_PASSWORD ?? "12345678aA";
+const SESSION_SECRET = process.env.SCOREBOARD_ADMIN_SESSION_SECRET ?? ADMIN_PASSWORD;
+const SESSION_TTL_MS = 1000 * 60 * 60 * 8;
+
+export function isAdminPassword(password) {
+  return safeEqual(String(password ?? ""), ADMIN_PASSWORD);
 }
 
-export function createAdminSession(cookies) {
-  cookies.set(SESSION_COOKIE, SESSION_VALUE, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: false,
+export function setAdminCookie(cookies) {
+  const expiresAt = Date.now() + SESSION_TTL_MS;
+  const session = `${expiresAt}.${signSession(expiresAt)}`;
+  cookies.set(COOKIE_NAME, session, {
     path: "/",
-    maxAge: 60 * 60 * 8
+    httpOnly: true,
+    sameSite: "strict",
+    secure: false,
+    maxAge: Math.floor(SESSION_TTL_MS / 1000)
   });
 }
 
-export function clearAdminSession(cookies) {
-  cookies.delete(SESSION_COOKIE, { path: "/" });
+export function clearAdminCookie(cookies) {
+  cookies.delete(COOKIE_NAME, { path: "/" });
 }
 
-export function isValidPassword(password) {
-  return Boolean(process.env.SCOREBOARD_ADMIN_PASSWORD) && password === process.env.SCOREBOARD_ADMIN_PASSWORD;
+export function requireAdmin(cookies) {
+  if (isAdmin(cookies)) return null;
+  return json({ ok: false, error: "관리자 인증이 필요합니다." }, 401);
+}
+
+export function isAdmin(cookies) {
+  const session = cookies.get(COOKIE_NAME)?.value;
+  if (!session) return false;
+
+  const [expiresAtText, signature] = session.split(".");
+  const expiresAt = Number(expiresAtText);
+  if (!Number.isFinite(expiresAt) || expiresAt < Date.now()) return false;
+
+  return safeEqual(signature, signSession(expiresAt));
 }
 
 export function json(payload, status = 200) {
@@ -33,4 +49,15 @@ export function json(payload, status = 200) {
       "cache-control": "no-store"
     }
   });
+}
+
+function signSession(expiresAt) {
+  return createHmac("sha256", SESSION_SECRET).update(`admin:${expiresAt}`).digest("hex");
+}
+
+function safeEqual(first, second) {
+  const firstBuffer = Buffer.from(String(first));
+  const secondBuffer = Buffer.from(String(second));
+  if (firstBuffer.length !== secondBuffer.length) return false;
+  return timingSafeEqual(firstBuffer, secondBuffer);
 }

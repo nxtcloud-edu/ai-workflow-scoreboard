@@ -10,6 +10,7 @@ import {
 export async function GET({ cookies }) {
   const unauthorized = requireAdmin(cookies);
   if (unauthorized) return unauthorized;
+
   return json({ ok: true, repos: await getScoreboardRepos() });
 }
 
@@ -59,12 +60,17 @@ async function readPublicRepo(repo) {
   if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
 
   const response = await fetch(`https://api.github.com/repos/${repo}`, { headers });
-  if (!response.ok) throw new Error("GitHub에서 repo를 찾지 못했습니다. public repo 링크인지 확인해 주세요.");
+  if (!response.ok) {
+    throw new Error("GitHub에서 repo를 찾지 못했습니다. public repo 링크인지 확인해 주세요.");
+  }
+
   const payload = await response.json();
   if (payload.private) throw new Error("private repo는 이 점수판에 등록하지 않습니다.");
   return payload;
 }
 
 function sanitizeError(error) {
-  return String(error?.message ?? error ?? "알 수 없는 오류").replace(/\s+/g, " ").slice(0, 220);
+  return String(error?.message ?? error ?? "알 수 없는 오류")
+    .replace(/\s+/g, " ")
+    .slice(0, 220);
 }
