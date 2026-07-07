@@ -1,0 +1,18 @@
+aws_region = "ap-northeast-2"
+
+vpc_id    = "vpc-0cd95c4e2fffe3008"
+subnet_id = "subnet-0b0dd8491ea3121dd"
+key_name  = "nxt-workshop"
+
+instance_type    = "t4g.small"
+root_volume_size = 12
+
+ssh_cidr_blocks  = ["113.198.219.119/32"]
+http_cidr_blocks = ["0.0.0.0/0"]
+
+github_token_parameter_name   = "/ai-workflow-scoreboard/github-token"
+admin_password_parameter_name = "/ai-workflow-scoreboard/admin-password"
+session_secret_parameter_name = "/ai-workflow-scoreboard/session-secret"
+
+quality_ai_enabled   = false
+enable_bedrock_policy = true

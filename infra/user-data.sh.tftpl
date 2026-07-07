@@ -1,0 +1,109 @@
+#!/bin/bash
+set -euxo pipefail
+
+APP_DIR="${app_dir}"
+REPO_URL="${repo_url}"
+REPO_BRANCH="${repo_branch}"
+AWS_REGION="${aws_region}"
+APP_PORT="${port}"
+
+fetch_parameter() {
+  local name="$1"
+  if [ -z "$name" ]; then
+    return 0
+  fi
+
+  aws ssm get-parameter \
+    --region "$AWS_REGION" \
+    --name "$name" \
+    --with-decryption \
+    --query 'Parameter.Value' \
+    --output text 2>/dev/null || true
+}
+
+dnf update -y
+dnf install -y git nginx nodejs npm awscli
+
+if ! id ec2-user >/dev/null 2>&1; then
+  useradd --create-home ec2-user
+fi
+
+rm -rf "$APP_DIR"
+git clone --depth=1 --branch "$REPO_BRANCH" "$REPO_URL" "$APP_DIR"
+mkdir -p "$APP_DIR/.cache" "$APP_DIR/.data"
+chown -R ec2-user:ec2-user "$APP_DIR"
+
+GITHUB_TOKEN_VALUE="$(fetch_parameter "${github_token_parameter_name}")"
+ADMIN_PASSWORD_VALUE="$(fetch_parameter "${admin_password_parameter_name}")"
+SESSION_SECRET_VALUE="$(fetch_parameter "${session_secret_parameter_name}")"
+
+cat >/etc/ai-workflow-scoreboard.env <<ENV
+PORT=$APP_PORT
+AWS_REGION=$AWS_REGION
+SCOREBOARD_EXCLUDED_LOGINS=${excluded_logins}
+SCOREBOARD_REPOS_FILE=$APP_DIR/.data/repos.json
+SCOREBOARD_SNAPSHOT_FILE=$APP_DIR/.cache/scoreboard-snapshot.json
+QUALITY_AI_ENABLED=${quality_ai_enabled}
+QUALITY_CACHE_FILE=$APP_DIR/.cache/quality.json
+QUALITY_COST_FILE=$APP_DIR/.cache/quality-costs.json
+BEDROCK_MODEL_ID=${bedrock_model_id}
+ENV
+
+if [ -n "$GITHUB_TOKEN_VALUE" ] && [ "$GITHUB_TOKEN_VALUE" != "None" ]; then
+  printf 'GITHUB_TOKEN=%s\n' "$GITHUB_TOKEN_VALUE" >>/etc/ai-workflow-scoreboard.env
+fi
+
+if [ -n "$ADMIN_PASSWORD_VALUE" ] && [ "$ADMIN_PASSWORD_VALUE" != "None" ]; then
+  printf 'SCOREBOARD_ADMIN_PASSWORD=%s\n' "$ADMIN_PASSWORD_VALUE" >>/etc/ai-workflow-scoreboard.env
+fi
+
+if [ -n "$SESSION_SECRET_VALUE" ] && [ "$SESSION_SECRET_VALUE" != "None" ]; then
+  printf 'SCOREBOARD_ADMIN_SESSION_SECRET=%s\n' "$SESSION_SECRET_VALUE" >>/etc/ai-workflow-scoreboard.env
+fi
+
+chmod 600 /etc/ai-workflow-scoreboard.env
+
+cd "$APP_DIR"
+sudo -u ec2-user npm ci
+sudo -u ec2-user npm run build
+
+cat >/etc/systemd/system/ai-workflow-scoreboard.service <<SERVICE
+[Unit]
+Description=AI Workflow Scoreboard
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=$APP_DIR
+EnvironmentFile=/etc/ai-workflow-scoreboard.env
+ExecStart=/usr/bin/node $APP_DIR/dist/server/entry.mjs
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+SERVICE
+
+cat >/etc/nginx/conf.d/ai-workflow-scoreboard.conf <<NGINX
+server {
+    listen 80;
+    server_name _;
+
+    location / {
+        proxy_pass http://127.0.0.1:$APP_PORT;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
+NGINX
+
+systemctl daemon-reload
+systemctl enable --now ai-workflow-scoreboard.service
+systemctl enable --now nginx.service
